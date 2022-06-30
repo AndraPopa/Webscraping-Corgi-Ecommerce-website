@@ -1,6 +1,5 @@
 import scrapy
 from ..items import CorgiThingsItem
-from ..utils import get_image_link
 
 
 class CorgiSpider(scrapy.Spider):
@@ -21,7 +20,7 @@ class CorgiSpider(scrapy.Spider):
         product_title = extract_with_css('h1::text')
         product_price = extract_with_css('span.money::text')
         product_no_of_reviews = extract_with_css('span.jdgm-prev-badge__text::text')
-        product_image_link = extract_with_css('div meta[itemprop="image"]')
+        product_image_link = extract_with_css('div meta[itemprop="image"]::attr(content)')
 
         if product_title:
             item["product_title"] = product_title
@@ -30,6 +29,6 @@ class CorgiSpider(scrapy.Spider):
         if product_no_of_reviews:
             item["product_no_of_reviews"] = product_no_of_reviews
         if product_image_link:
-            item["product_image_link"] = get_image_link(product_image_link)
+            item["product_image_link"] = product_image_link
 
         yield item
