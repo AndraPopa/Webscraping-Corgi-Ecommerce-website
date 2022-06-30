@@ -7,6 +7,6 @@ import scrapy
 
 
 class CorgiThingsItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    product_title = scrapy.Field()
+    product_price = scrapy.Field()
+    product_no_of_reviews = scrapy.Field()
