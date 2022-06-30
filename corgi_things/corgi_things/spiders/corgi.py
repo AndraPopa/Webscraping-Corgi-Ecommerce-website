@@ -1,5 +1,6 @@
 import scrapy
-from corgi_things.corgi_things.items import CorgiThingsItem
+from ..items import CorgiThingsItem
+
 
 class CorgiSpider(scrapy.Spider):
     name = 'corgi'
@@ -7,8 +8,24 @@ class CorgiSpider(scrapy.Spider):
     start_urls = ['https://corgithings.com/collections/shop']
 
     def parse(self, response):
-        corgi_product_link = response.css('div.product-title::attr(href)')
+        corgi_product_link = response.css('div.product-title a::attr(href)')
         yield from response.follow_all(corgi_product_link, callback=self.parse_corgi_item)
 
-    def parse_corgi_item(self):
-        pass
+    def parse_corgi_item(self, response):
+        item = CorgiThingsItem()
+
+        def extract_with_css(query):
+            return response.css(query).get()
+
+        product_title = extract_with_css('h1::text')
+        product_price = extract_with_css('span.money::text')
+        product_no_of_reviews = extract_with_css('span.jdgm-prev-badge__text::text')
+
+        if product_title:
+            item["product_title"] = product_title
+        if product_price:
+            item["product_price"] = product_price
+        if product_no_of_reviews:
+            item["product_no_of_reviews"] = product_no_of_reviews
+
+        yield item
