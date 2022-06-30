@@ -34,7 +34,7 @@ class CorgiSpider(scrapy.Spider):
         if product_price:
             item["product_price"] = product_price.rstrip().lstrip()
         if product_no_of_reviews:
-            item["product_no_of_reviews"] = product_no_of_reviews
+            item["product_no_of_reviews"] = product_no_of_reviews.rstrip().lstrip()
         if product_image_link:
             item["product_image_link"] = product_image_link
 
