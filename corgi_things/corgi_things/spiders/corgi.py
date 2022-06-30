@@ -4,12 +4,19 @@ from ..items import CorgiThingsItem
 
 class CorgiSpider(scrapy.Spider):
     name = 'corgi'
+    page_number = 2
     allowed_domains = ['corgithings.com']
     start_urls = ['https://corgithings.com/collections/shop']
 
     def parse(self, response):
         corgi_product_link = response.css('div.product-title a::attr(href)')
         yield from response.follow_all(corgi_product_link, callback=self.parse_corgi_item)
+
+        next_page = f"https://corgithings.com/collections/shop?page={self.page_number}"
+        if self.page_number < 9:
+            self.page_number += 1
+            yield response.follow(next_page, callback=self.parse)
+
 
     def parse_corgi_item(self, response):
         item = CorgiThingsItem()
