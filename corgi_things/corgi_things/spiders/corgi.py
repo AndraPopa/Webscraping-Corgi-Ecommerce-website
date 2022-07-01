@@ -17,7 +17,6 @@ class CorgiSpider(scrapy.Spider):
             abs_url = f"https://corgithings.com{next_page}"
             yield from response.follow_all(abs_url, callback=self.parse)
 
-
     def parse_corgi_item(self, response):
         item = CorgiThingsItem()
 
@@ -29,6 +28,10 @@ class CorgiSpider(scrapy.Spider):
         product_no_of_reviews = extract_with_css('span.jdgm-prev-badge__text::text')
         product_image_link = extract_with_css('div meta[itemprop="image"]::attr(content)')
 
+        images = list()
+        for img in response.css('div meta[itemprop="image"]::attr(content)').getall():
+            images.append(response.urljoin(img))
+
         if product_title:
             item["product_title"] = product_title
         if product_price:
@@ -39,3 +42,6 @@ class CorgiSpider(scrapy.Spider):
             item["product_image_link"] = product_image_link
 
         yield item
+        yield {
+            'image_urls': images
+        }
