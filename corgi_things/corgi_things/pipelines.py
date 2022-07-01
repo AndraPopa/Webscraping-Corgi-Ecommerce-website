@@ -1,7 +1,7 @@
 import pymongo
 
 
-class CorgiThingsPipeline:
+class CorgiMongoPipeline:
 
     def __init__(self):
         self.conn = pymongo.MongoClient('localhost', 27017)

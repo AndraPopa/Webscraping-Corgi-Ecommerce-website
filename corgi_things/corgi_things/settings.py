@@ -63,7 +63,7 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'corgi_things.pipelines.CorgiThingsPipeline': 300,
+   'corgi_things.pipelines.CorgiMongoPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
