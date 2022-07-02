@@ -9,5 +9,6 @@ ITEM_PIPELINES = {
    'corgi_things.pipelines.CorgiMongoPipeline': 300,
    'scrapy.pipelines.images.ImagesPipeline': 1
 }
-IMAGES_STORE = 'F:\Stefanini\scrapy_corgi\corgi_things\corgi_things\image_downloads'
+IMAGES_STORE = 's3://store-the-corgi-pictures-23021998/images/'
+IMAGES_STORE_S3_ACL = 'public-read'
 
