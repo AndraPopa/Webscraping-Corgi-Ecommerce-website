@@ -1,13 +1,24 @@
-# Define your item pipelines here
-#
-# Don't forget to add your pipeline to the ITEM_PIPELINES setting
-# See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+import pymongo
 
 
-# useful for handling different item types with a single interface
-from itemadapter import ItemAdapter
+class CorgiMongoPipeline:
 
+    def __init__(self):
+        self.conn = pymongo.MongoClient('localhost', 27017)
+        db = self.conn['corgi_things']
+        self.collection = db['corgi_stuff']
 
-class CorgiThingsPipeline:
     def process_item(self, item, spider):
+        global item_dict
+        try:
+            item_dict = {
+                'Title': item['product_title'],
+                'Price': item['product_price'],
+                'No. reviews': item['product_no_of_reviews'],
+                'Link to image': item['product_image_link']
+            }
+        except KeyError:
+            print("corgi broken")
+        finally:
+            self.collection.insert_one(item_dict)
         return item
